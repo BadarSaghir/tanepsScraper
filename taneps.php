@@ -4,57 +4,6 @@ require 'vendor/autoload.php';
 
 use Goutte\Client;
 
-class TanepsAwardModel
-{
-    public String  $tenderNo;
-    public String  $tenderUrl;
-    public String  $procuringEntity;
-    public String  $supplierName;
-    public String  $awardDate;
-    public String  $awardAmount;
-    function __construct(
-        $tenderNo,
-        $tenderUrl,
-        $procuringEntity,
-        $supplierName,
-        $awardDate,
-        $awardAmount
-    ) {
-        $this->tenderNo =  $tenderNo;
-        $this->tenderUrl =  $tenderUrl;
-        $this->procuringEntity =  $procuringEntity;
-        $this->supplierName =  $supplierName;
-        $this->awardDate =  $awardDate;
-        $this->awardAmount =  $awardAmount;
-    }
-    function getAssociativeArray()
-    {
-        $tender = array(
-            "Tender No" => $this->tenderNo,
-            "Tender Url" => $this->tenderUrl,
-            "Procuring Entity" => $this->procuringEntity,
-            "Supplier Name" => $this->supplierName,
-            "Award Date" => $this->awardDate,
-            "Award Amount" => $this->awardAmount
-        );
-        $tender;
-        return $tender;
-    }
-    function getAssociativeArrayRow()
-    {
-        $tender = array(
-            $this->tenderNo,
-            $this->tenderUrl,
-            $this->procuringEntity,
-            $this->supplierName,
-            $this->awardDate,
-            $this->awardAmount
-        );
-        $tender;
-        return $tender;
-    }
-}
-
 $option = [
     'timeout' => 300,
     // 'headers' => [
@@ -73,10 +22,10 @@ $option = [
 ];
 
 
-$client = new Client();
 // $client->request('');
 
 for ($x = 1; $x <= 539; $x++) {
+    $client = new Client();
 $tanepsAwardModel = array(['Tender No', 'Tender Url', 'Procuring Entity', 'Supplier Name', 'Award Date', 'Award Amount']);
 echo "The page number is: $x";
 
@@ -139,14 +88,14 @@ $res->filter('#T01 tbody tr td:nth-child(2)')->each(function ($node,$i) use(&$pr
             for($k=0;$k<sizeof($awardDate);$k++){
                 array_push($tanepsAwardModel,[$tenderNumbers[$k], $tenderLinks[$k], $procuringEntity[$k], $supplierName[$k], $awardDate[$k], $awardAmount[$k]]);
             }
-        } catch (\Exception $e) {
+    } catch (Exception $e) {
             print_r("Error timeout");
         }
             // Open a file in write mode ('w')
             echo "\nThe starting csv $x";
-            
-            // if($i==1)
-                    $fp = fopen("page-{$x}.csv", 'w');
+
+    // if($i==1)
+    $fp = fopen("csv/page-{$x}.csv", 'w');
                     // else{
                     // $fp= fopen('site.csv', 'a');
                     // }
@@ -159,5 +108,5 @@ $res->filter('#T01 tbody tr td:nth-child(2)')->each(function ($node,$i) use(&$pr
                     fclose($fp);
                     $tanepsAwardModel=[];
                     echo "\nEnd 100 $x\n";
-                    sleep(15);
+    sleep(2);
                 } 
